@@ -1,9 +1,12 @@
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -34,7 +37,8 @@ public class ProcessingPipe implements Runnable {
         ChromeOptions options = new ChromeOptions();
 //        options.setHeadless(true);
 //        options.addArguments("--window-size=1920,1080");
-        driver = new ChromeDriver();
+        System.setProperty("webdriver.edge.driver", "C:\\Users\\fzp281\\Documents\\Edge\\msedgedriver.exe");
+        driver = new EdgeDriver();
 //        driver = new HtmlUnitDriver(BrowserVersion.CHROME,true);
         pool = Executors.newFixedThreadPool(100);
     }
@@ -44,19 +48,22 @@ public class ProcessingPipe implements Runnable {
 //        driver.getCapabilities();
         driver.get("http://service.tartaglialab.com/page/catrapid_omics2_group");
         driver.findElement(By.linkText("catRAPID omics v2.1 [custom protein set VS custom transcript set]")).click();
-        driver.findElement(By.linkText("Click here")).click();
-        List<WebElement> elements = driver.findElements(By.tagName("iframe"));
+//        driver.findElement(By.linkText("Click here")).click();
+//        List<WebElement> elements = driver.findElements(By.tagName("iframe"));
+//
+//        driver.switchTo().frame(elements.get(0));
+//        WebElement proteinInput = driver.findElement(By.id("uploadfile"));
+//        proteinInput.sendKeys(protienFasta.getAbsolutePath());
 
-        driver.switchTo().frame(elements.get(0));
-        WebElement proteinInput = driver.findElement(By.id("uploadfile"));
-        proteinInput.sendKeys(protienFasta.getAbsolutePath());
+        WebElement proteinTextArea = driver.findElements(By.id("prot_seq")).get(0);
+        proteinTextArea.sendKeys("test");
 
 
-        driver.switchTo().defaultContent();
+//        driver.switchTo().defaultContent();
 
-        driver.switchTo().frame(elements.get(1));
-        WebElement rnaInput = driver.findElement(By.id("uploadfile"));
-        rnaInput.sendKeys(rnaFasta.getAbsolutePath());
+//        driver.switchTo().frame(elements.get(1));
+//        WebElement rnaInput = driver.findElement(By.id("uploadfile"));
+//        rnaInput.sendKeys(rnaFasta.getAbsolutePath());
 
         driver.switchTo().defaultContent();
         driver.navigate().refresh();

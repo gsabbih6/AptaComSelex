@@ -10,7 +10,7 @@ public class MainApplication {
     public static void main(String[] args) throws IOException {
         executor = Executors.newFixedThreadPool(100);
 //        int defaultNum = args == null ? 100 : Integer.parseInt(args[0]);
-        generateAptamers(5000);
+        generateAptamers(100);
 
         // Process files in data
         File dir = new File("data");
