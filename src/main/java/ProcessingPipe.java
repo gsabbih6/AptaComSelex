@@ -1,4 +1,5 @@
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -6,13 +7,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -20,6 +22,7 @@ import java.util.concurrent.Executors;
 
 public class ProcessingPipe implements Runnable {
 
+    //    Logger log=new Logger();
     File rnaFasta;
     WebDriver driver;
 //    HtmlUnitDriver driver;
@@ -30,17 +33,20 @@ public class ProcessingPipe implements Runnable {
      * Selenium implementation for CatRapid
      * */
 
+    private static Logger logger;
 
     public ProcessingPipe(File protienFasta, File rnaFasta) {
         this.protienFasta = protienFasta;
         this.rnaFasta = rnaFasta;
-        ChromeOptions options = new ChromeOptions();
-//        options.setHeadless(true);
-//        options.addArguments("--window-size=1920,1080");
+        EdgeOptions options = new EdgeOptions();
+        options.setHeadless(true);
+        options.addArguments("--window-size=1920,1080");
         System.setProperty("webdriver.edge.driver", "C:\\Users\\fzp281\\Documents\\Edge\\msedgedriver.exe");
-        driver = new EdgeDriver();
+        driver = new EdgeDriver(options);
 //        driver = new HtmlUnitDriver(BrowserVersion.CHROME,true);
         pool = Executors.newFixedThreadPool(100);
+        logger = LoggerFactory.getLogger(ProcessingPipe.class);
+
     }
 
     /*returns the download url*/
@@ -48,22 +54,26 @@ public class ProcessingPipe implements Runnable {
 //        driver.getCapabilities();
         driver.get("http://service.tartaglialab.com/page/catrapid_omics2_group");
         driver.findElement(By.linkText("catRAPID omics v2.1 [custom protein set VS custom transcript set]")).click();
-//        driver.findElement(By.linkText("Click here")).click();
-//        List<WebElement> elements = driver.findElements(By.tagName("iframe"));
-//
-//        driver.switchTo().frame(elements.get(0));
-//        WebElement proteinInput = driver.findElement(By.id("uploadfile"));
-//        proteinInput.sendKeys(protienFasta.getAbsolutePath());
+        driver.findElement(By.linkText("Click here")).click();
+        List<WebElement> elements = driver.findElements(By.tagName("iframe"));
 
-        WebElement proteinTextArea = driver.findElements(By.id("prot_seq")).get(0);
-        proteinTextArea.sendKeys("test");
+        driver.switchTo().frame(elements.get(0));
+        WebElement proteinInput = driver.findElement(By.id("uploadfile"));
+        proteinInput.sendKeys(protienFasta.getAbsolutePath());
+        driver.switchTo().defaultContent();
+
+//        WebElement proteinTextArea = driver.findElements(By.id("prot_seq")).get(0);
+//        proteinTextArea.sendKeys(readFile(protienFasta));
+//
+//        WebElement rnaTextArea = driver.findElements(By.id("rna_seq")).get(0);
+//        rnaTextArea.sendKeys(readFile(rnaFasta));
 
 
 //        driver.switchTo().defaultContent();
 
-//        driver.switchTo().frame(elements.get(1));
-//        WebElement rnaInput = driver.findElement(By.id("uploadfile"));
-//        rnaInput.sendKeys(rnaFasta.getAbsolutePath());
+        driver.switchTo().frame(elements.get(1));
+        WebElement rnaInput = driver.findElement(By.id("uploadfile"));
+        rnaInput.sendKeys(rnaFasta.getAbsolutePath());
 
         driver.switchTo().defaultContent();
         driver.navigate().refresh();
@@ -105,8 +115,8 @@ public class ProcessingPipe implements Runnable {
             FileUtils.copyURLToFile(
                     new URL(url),
                     file,
-                    10000,
-                    10000);
+                    300000,
+                    300000);
 
         }
 
@@ -119,15 +129,33 @@ public class ProcessingPipe implements Runnable {
 //                pool.shutdown();
             }
         }
+
     }
 
 
     @Override
     public void run() {
 
-        pool.execute(new DownloadResults(process(),
-                new File("output/" + this.rnaFasta.getName() + "_out.zip")));
-        pool.shutdown();
+//        pool.submit(new DownloadResults(process(),
+//                new File("output/" + this.rnaFasta.getName() + "_out.zip")));
+//        pool.shutdown();
+        logger.info("Processing job: " + rnaFasta.getName());
+        System.out.println("Processing job: " + rnaFasta.getName());
+        File file = new File("output/" + this.rnaFasta.getName() + "_out.zip");
+        String url = process();
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();// make directory
+        try {
+            FileUtils.copyURLToFile(
+                    new URL(url),
+                    file,
+                    300000,
+                    300000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        new DownloadResults(process(),
+//                new File("output/" + this.rnaFasta.getName() + "_out.zip"));
+
 
     }
 }

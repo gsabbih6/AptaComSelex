@@ -103,4 +103,11 @@ public class Testing {
 
         }
     }
+    @Test
+    public void readFile(){
+//        File diro = new File("proteindata");
+//        File[] proteindir = diro.listFiles();
+//        ProcessingPipe p=new ProcessingPipe(proteindir[0],null);
+//        p.readFile(rnaFasta);
+    }
 }

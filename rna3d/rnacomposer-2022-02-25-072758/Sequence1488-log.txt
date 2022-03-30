@@ -1,0 +1,180 @@
+Batch identififer:	04dd645b-1001-4bb2-aefd-25b56ea1edc8
+Task description:	Sequence1488
+Sequence:		AACCGGCGGUUCUCGGGCCAGAAUUCGAUGGCCGCCGGUU
+Secondary structure:	((((((((((..(((((......)))))..))))))))))
+
+2022-02-25 03:12:07	Task launched.
+
+
+2022-02-25 03:12:07	
+STEP: Input data validation.
+2022-02-25 03:12:07	
+Secondary structure provided by the user.
+2022-02-25 03:12:07	
+Input data validation completed (0:0:0:2).
+
+
+2022-02-25 03:12:17	
+Configuration of filters for structural elements repository:
+Generate A-RNA-based double helices:	Off
+Generate A-RNA-based single strands:	Off
+Use X-ray determined structures only:	On
+Set resolution threshold:	3,000
+
+2022-02-25 03:12:17	
+Restraints configuration:
+No atom distance restraints introduced by the user.
+No torsion angle restraints introduced by the user.
+
+2022-02-25 03:12:17	
+No structural elements introduced by the user.
+
+2022-02-25 03:12:17	
+STEP 1: Secondary structure fragmentation.
+2022-02-25 03:12:17	
+Secondary elements obtained:
+
+Stem	D1	1 10 AACCGGCGGU (((((((((( 31 40 GCCGCCGGUU )))))))))) 
+
+Stem	D2	13 17 UCGGG ((((( 24 28 UUCGA ))))) 
+
+Loop	L1	10 13 UUCU (..( 28 31 AUGG )..) 
+
+Loop	L2	17 24 GCCAGAAU (......) 
+
+2022-02-25 03:12:17	
+Secondary structure fragmentation completed (0:0:0:2).
+
+
+2022-02-25 03:12:17	
+STEP 2: 3D structure elements preparation.
+2022-02-25 03:12:17	
+3D structure elements preparation completed (0:0:0:704).
+
+
+2022-02-25 03:12:17	
+3D structure elements ready for composition.
+
+
+2022-02-25 03:12:17	
+STEP 3: 3D structure elements rigid body transformation.
+2022-02-25 03:12:17	
+3D structure elements rigid body transformation completed (0:0:0:0).
+
+
+2022-02-25 03:12:17	
+MODEL 1
+
+
+2022-02-25 03:12:17	
+3D structure elements selected to compose model 1:
+
+Stem D1 1 10 AACCGGCGGU (((((((((( 31 40 GCCGCCGGUU ))))))))))
+based on 4KIZ (1) 2.90[A]
+A 1066 1075 CACGGCGGGU (((((((((( B 1082 1091 GUCCGUCGUG )))))))))) with homology 50.00%
+
+Stem D2 13 17 UCGGG ((((( 24 28 UUCGA )))))
+based on 2J02 (1) 2.80[A]
+V 1550 1554 UCGGG ((((( V 1562 1566 CCCGA ))))) with homology 80.00%
+
+Loop L1 10 13 UUCU (..( 28 31 AUGG )..)
+based on 3U5H (1) 3.00[A]
+B 1041 1044 UUCU (..( A 1006 1009 AUUA )..) with homology 75.00%
+
+Loop L2 17 24 GCCAGAAU (......)
+based on 3U5H (1) 3.00[A]
+A 2897 2904 AGCAGAAU (......) with homology 75.00%
+
+
+2022-02-25 03:12:17	
+STEP 4: 3D structure elements merging.
+2022-02-25 03:12:17	
+3D structure elements merging completed (0:0:0:156).
+
+
+2022-02-25 03:12:17	
+STEP 5: Initial 3D structure minimization in torsion angle space.
+2022-02-25 03:12:17	
+Initial 3D structure minimization in torsion angle space completed (0:0:0:43).
+
+
+2022-02-25 03:12:17	
+STEP 6: Composed 3D structure minimization in atomic Cartesian coordinates space.
+2022-02-25 03:12:17	
+
+ --------------- cycle=   100 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-589.747   grad(E)=5.305      E(BOND)=21.954     E(ANGL)=249.433    |
+ | E(IMPR)=49.974     E(VDW )=-560.842   E(ELEC)=-422.041   E(CDIH)=0.000      |
+ | E(NOE )=0.197      E(PLAN)=71.577                                           |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   200 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-785.934   grad(E)=7.017      E(BOND)=14.689     E(ANGL)=179.880    |
+ | E(IMPR)=26.675     E(VDW )=-593.097   E(ELEC)=-450.254   E(CDIH)=0.000      |
+ | E(NOE )=5.466      E(PLAN)=30.707                                           |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   300 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-872.825   grad(E)=1.823      E(BOND)=10.360     E(ANGL)=149.185    |
+ | E(IMPR)=22.162     E(VDW )=-601.825   E(ELEC)=-473.568   E(CDIH)=0.000      |
+ | E(NOE )=7.384      E(PLAN)=13.477                                           |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   400 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-915.290   grad(E)=3.000      E(BOND)=8.829      E(ANGL)=136.144    |
+ | E(IMPR)=18.986     E(VDW )=-608.421   E(ELEC)=-486.187   E(CDIH)=0.000      |
+ | E(NOE )=3.190      E(PLAN)=12.168                                           |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   500 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-939.884   grad(E)=1.229      E(BOND)=8.532      E(ANGL)=134.795    |
+ | E(IMPR)=16.964     E(VDW )=-616.565   E(ELEC)=-498.094   E(CDIH)=0.000      |
+ | E(NOE )=1.437      E(PLAN)=13.045                                           |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   600 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-957.448   grad(E)=2.207      E(BOND)=8.392      E(ANGL)=130.618    |
+ | E(IMPR)=16.962     E(VDW )=-621.370   E(ELEC)=-506.715   E(CDIH)=0.000      |
+ | E(NOE )=2.584      E(PLAN)=12.081                                           |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   700 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-971.112   grad(E)=1.042      E(BOND)=8.125      E(ANGL)=129.362    |
+ | E(IMPR)=16.504     E(VDW )=-622.546   E(ELEC)=-512.240   E(CDIH)=0.000      |
+ | E(NOE )=1.421      E(PLAN)=8.262                                            |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   800 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-976.572   grad(E)=0.786      E(BOND)=8.018      E(ANGL)=127.963    |
+ | E(IMPR)=16.534     E(VDW )=-624.881   E(ELEC)=-513.623   E(CDIH)=0.000      |
+ | E(NOE )=1.952      E(PLAN)=7.466                                            |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=   900 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-984.631   grad(E)=1.294      E(BOND)=8.184      E(ANGL)=126.472    |
+ | E(IMPR)=16.924     E(VDW )=-627.998   E(ELEC)=-519.025   E(CDIH)=0.000      |
+ | E(NOE )=3.851      E(PLAN)=6.961                                            |
+ -------------------------------------------------------------------------------
+
+ --------------- cycle=  1000 ------ stepsize=    0.0001 -----------------------
+ | Etotal =-993.510   grad(E)=0.705      E(BOND)=8.063      E(ANGL)=125.392    |
+ | E(IMPR)=16.797     E(VDW )=-627.827   E(ELEC)=-523.279   E(CDIH)=0.000      |
+ | E(NOE )=1.228      E(PLAN)=6.116                                            |
+ -------------------------------------------------------------------------------
+
+
+2022-02-25 03:12:17	
+Composed 3D structure minimization in atomic Cartesian coordinates space completed (0:0:8:428).
+
+
+2022-02-25 03:12:17	
+Composed 3D structure refinement completed(0:0:8:472).
+
+
+2022-02-25 03:12:17	
+MODEL 1 successfully composed.
+2022-02-25 03:12:17	
+MODEL 1 composition time: 0:0:8:863.
+
+
+2022-02-25 03:12:17	Task completed.
