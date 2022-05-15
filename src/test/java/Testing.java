@@ -4,11 +4,13 @@ import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -88,26 +90,42 @@ public class Testing {
             writer.writeHeaders();
             // Writes the headers specified in the settings
 //            System.out.println(writer.writeHeadersToString());
-            propensityPOJOS.stream().forEach((data)->{
-                data.setTopRNAFragment("'"+data.getTopRNAFragment());
+            propensityPOJOS.stream().forEach((data) -> {
+                data.setTopRNAFragment("'" + data.getTopRNAFragment());
                 writer.processRecord(data);
             });
 
             writer.close();
             System.out.println(csvResult);
-            File file=new File("results/result.csv");
+            File file = new File("results/result.csv");
             if (!file.getParentFile().exists()) file.getParentFile().mkdirs();// make directory
-            try(OutputStream outputStream = new FileOutputStream(file)) {
+            try (OutputStream outputStream = new FileOutputStream(file)) {
                 csvResult.writeTo(outputStream);
             }
 
         }
     }
+
     @Test
-    public void readFile(){
-//        File diro = new File("proteindata");
+    public void readFile() throws IOException {
+//        File diro = new File("data");
 //        File[] proteindir = diro.listFiles();
-//        ProcessingPipe p=new ProcessingPipe(proteindir[0],null);
-//        p.readFile(rnaFasta);
+//        ProcessingPipe p = new ProcessingPipe(proteindir[0], proteindir[0]);
+//  String url=p.processRPISeq("SQATSQPINFQVQKDGSSEKSHMDDYMQHPGKVIKQNNKYYFQTVLNNASFWKEYKFYNA\n" +
+//                "NNQELATTVVNDNKKADTRTINVAVEPGYKSLTTKVHIVVPQINYNHRYTTHLEFEKAIP\n" +
+//                "TLA");
+//        File file = new File("output/" + proteindir[0].getName() + "_out.txt");
+////        String url = processCatrapid();
+//        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();// make directory
+//        try {
+//            FileUtils.copyURLToFile(
+//                    new URL(url),
+//                    file,
+//                    300000,
+//                    300000);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        new Result().processResultsRPISeq();
     }
 }

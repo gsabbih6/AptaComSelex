@@ -110,7 +110,7 @@ public class AptamerGenerator implements Generator {
         }
 
 //        for (int i = 0; i < 10; i++) {
-            s.append(getRandomPart(10));
+//            s.append(getRandomPart(10));
 //        }
         return s.toString();
     }
@@ -191,7 +191,7 @@ public class AptamerGenerator implements Generator {
 //        for (int i = 0; i < 10; i++) {
 //            s.append(getRandomPart(4));
 //        }
-        s.append(getRandomPart(10));
+//        s.append(getRandomPart(10));
         return s.toString();
     }
 
@@ -261,7 +261,7 @@ public class AptamerGenerator implements Generator {
 //        for (int i = 0; i < 10; i++) {
 //            s.append(getRandomPart(4));
 //        }
-        s.append(getRandomPart(10));
+//        s.append(getRandomPart(10));
         return s.toString();
     }
 
@@ -325,7 +325,7 @@ public class AptamerGenerator implements Generator {
 //        for (int i = 0; i < 10; i++) {
 //            s.append(getRandomPart(4));
 //        }
-        s.append(getRandomPart(10));
+//        s.append(getRandomPart(10));
         return s.toString();
     }
 

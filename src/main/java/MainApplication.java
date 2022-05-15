@@ -1,3 +1,5 @@
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -11,14 +13,18 @@ public class MainApplication {
 
         for (String s : args) {
             if (s.equalsIgnoreCase("-g_aptamers_seq")) {
-                generateAptamers(Integer.parseInt(args[1]));
+//                generateAptamers(Integer.parseInt(args[1]));
 //                initCatRAPIDProcess();
+
             }
             if (s.equalsIgnoreCase("-s_dock")) {
-                new Docking("rna3d").startProcess();
+//                new Docking("rna3d").startProcess();
             }
             if (s.equalsIgnoreCase("do_catrapid")) {
                 initCatRAPIDProcess();
+            }
+            if (s.equalsIgnoreCase("do_rpiseq")) {
+                initPRISeqProcess();
             }
         }
 //        new Docking("test").dock(new ProcessBuilder(),
@@ -28,6 +34,41 @@ public class MainApplication {
 //
 //
 //        new Docking("rna3d").startProcess();
+    }
+
+    private static void initPRISeqProcess() throws IOException, InterruptedException {
+
+        executor = Executors.newFixedThreadPool(10);
+//        int defaultNum = args == null ? 100 : Integer.parseInt(args[0]);
+        // Process files in data
+        File dir = new File("data");
+        File[] rnadir = dir.listFiles();
+        File diro = new File("proteindata");
+        File[] proteindir = diro.listFiles();
+        if (rnadir != null && proteindir != null) {
+            for (File child : rnadir) {
+                // Do something with child
+//                System.out.println(child.getAbsolutePath());
+                Thread.sleep(300);
+                processRPISeq(FileUtils.readFileToString(proteindir[0], "UTF-8"), child);
+            }
+            System.out.println(proteindir[0].getAbsolutePath());
+        } else {
+            // Handle the case where dir is not really a directory.
+            // Checking dir.isDirectory() above would not be sufficient
+            // to avoid race conditions with another process that deletes
+            // directories.
+        }
+        executor.shutdown();
+//         release resources
+
+        if (executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS)) {
+            new Result().processResultsRPISeq();
+        }
+
+
+//        result(executor);
+//        new Result().processResults();
     }
 
     private static void initCatRAPIDProcess() throws IOException, InterruptedException {
@@ -108,7 +149,7 @@ public class MainApplication {
         System.out.println(p4s.length);
         RNAFolder2D rfa = new RNAFolder2D();
         HashSet<RNA> rnaPool = new HashSet<>();
-        if (!p4sArray1.isEmpty())
+        if (!p1sArray1.isEmpty())
             p1sArray1.parallelStream().forEach((seq) -> {
                 RNAFolder2D.FoldRes res = rfa.predictMFE(seq);
                 rnaPool.add(new RNA(seq, res.structure, res.mfe));
@@ -132,7 +173,7 @@ public class MainApplication {
 
         // Perform screening based on set criteria
         PriorityQueue<RNA> newRnaPool;
-        ScreeningRNA screeningRNA = new ScreeningRNA(rnaPool, -30.0, 10, 30);
+        ScreeningRNA screeningRNA = new ScreeningRNA(rnaPool, -23.0, 10, 30);
         screeningRNA.process();
         newRnaPool = screeningRNA.getNewPool();
         Iterator<RNA> ite = newRnaPool.iterator();
@@ -148,12 +189,13 @@ public class MainApplication {
 
         int count = 1;
         int num = 0;
+        int breakNum = 100;
         while (!newRnaPool.isEmpty()) {
 
 
-            if (num % 500 == 0) {
+            if (num % breakNum == 0) {
                 bw.close();
-                fout = new File("data/GD2AptamerFasta_" + num / 500 + ".fasta");
+                fout = new File("data/GD2AptamerFasta_" + num / breakNum + ".fasta");
                 if (!fout.getParentFile().exists())
                     fout.getParentFile().mkdirs();
                 fos = new FileOutputStream(fout);
@@ -182,6 +224,10 @@ public class MainApplication {
 
     private static void process(File protienFasta, File rnaFasta) {
         executor.submit(new ProcessingPipe(protienFasta, rnaFasta));
+    }
+
+    private static void processRPISeq(String protienFasta, File rnaFasta) {
+        executor.submit(new ProcessingRPISeq(protienFasta, rnaFasta));
     }
 
     private static String covertTo3D(ProcessBuilder processBuilder, RNA rna) {

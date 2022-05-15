@@ -41,8 +41,10 @@ public class ProcessingPipe implements Runnable {
         EdgeOptions options = new EdgeOptions();
         options.setHeadless(true);
         options.addArguments("--window-size=1920,1080");
+
+        // location of the browsers webdriver
         System.setProperty("webdriver.edge.driver", "C:\\Users\\fzp281\\Documents\\Edge\\msedgedriver.exe");
-        driver = new EdgeDriver(options);
+        driver = new EdgeDriver();
 //        driver = new HtmlUnitDriver(BrowserVersion.CHROME,true);
         pool = Executors.newFixedThreadPool(100);
         logger = LoggerFactory.getLogger(ProcessingPipe.class);
@@ -50,7 +52,7 @@ public class ProcessingPipe implements Runnable {
     }
 
     /*returns the download url*/
-    private String process() {
+    private String processCatrapid() {
 //        driver.getCapabilities();
         driver.get("http://service.tartaglialab.com/page/catrapid_omics2_group");
         driver.findElement(By.linkText("catRAPID omics v2.1 [custom protein set VS custom transcript set]")).click();
@@ -98,39 +100,76 @@ public class ProcessingPipe implements Runnable {
 
     }
 
-    class DownloadResults implements Runnable {
+    public String processRPISeq(String protienFastaString) {
+//        driver.getCapabilities();
+        driver.get("http://pridb.gdcb.iastate.edu/RPISeq/batch-prot.html");
+//        driver.findElement(By.linkText("catRAPID omics v2.1 [custom protein set VS custom transcript set]")).click();
+//        driver.findElement(By.linkText("Click here")).click();
+//        List<WebElement> elements = driver.findElements(By.tagName("iframe"));
 
-        private String url;
-        private File file;
+        WebElement protienFastaElement = driver.findElement(By.id("p_input"));
+        protienFastaElement.sendKeys(protienFastaString);
 
-        public DownloadResults(String url, File file) {
-            this.url = url;
-            this.file = file;
-        }
+//
+        WebElement rnaInput = driver.findElement(By.id("r_input"));
+        rnaInput.sendKeys(rnaFasta.getAbsolutePath());
 
-        public void downloadResults() throws IOException {
 
-            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();// make directory
+//        WebElement submit = driver.findElement(By.name("submit"));
+//        submit.click();
+//
+        WebElement submit = new WebDriverWait(driver, Duration.ofSeconds(300))
+                .until(ExpectedConditions.elementToBeClickable(By.name("submit")));
+        submit.click();
+//
+//        WebElement result = new WebDriverWait(driver, Duration.ofSeconds(300))
+//                .until(ExpectedConditions.elementToBeClickable(By.linkText("result")));
+//        result.click();
+//
+        WebElement reduced = new WebDriverWait(driver, Duration.ofHours(1))
+                .until(ExpectedConditions.elementToBeClickable(By.linkText("here")));
+        String downloadLink = reduced.getAttribute("href");
+//        System.out.println(downloadLink);
 
-            FileUtils.copyURLToFile(
-                    new URL(url),
-                    file,
-                    300000,
-                    300000);
+//        driver.close();
+//        driver.quit();
 
-        }
-
-        @Override
-        public void run() {
-            try {
-                downloadResults();
-            } catch (IOException e) {
-                e.printStackTrace();
-//                pool.shutdown();
-            }
-        }
+        return downloadLink;
 
     }
+//    class DownloadResults implements Runnable {
+//
+//        private String url;
+//        private File file;
+//
+//        public DownloadResults(String url, File file) {
+//            this.url = url;
+//            this.file = file;
+//        }
+//
+//        public void downloadResults() throws IOException {
+//
+//            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();// make directory
+//
+//            FileUtils.copyURLToFile(
+//                    new URL(url),
+//                    file,
+//                    300000,
+//                    300000);
+//
+//        }
+//
+//        @Override
+//        public void run() {
+//            try {
+//                downloadResults();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+////                pool.shutdown();
+//            }
+//        }
+//
+//    }
 
 
     @Override
@@ -142,7 +181,7 @@ public class ProcessingPipe implements Runnable {
         logger.info("Processing job: " + rnaFasta.getName());
         System.out.println("Processing job: " + rnaFasta.getName());
         File file = new File("output/" + this.rnaFasta.getName() + "_out.zip");
-        String url = process();
+        String url = processCatrapid();
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();// make directory
         try {
             FileUtils.copyURLToFile(
